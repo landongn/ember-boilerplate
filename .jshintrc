@@ -17,7 +17,9 @@
     "globals": {
         "App": true,
         "jQuery": true,
+        "$": true,
         "Ember": true,
+        "Em": true,
         "Handlebars": true,
         "DS": true
     }
