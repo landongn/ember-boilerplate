@@ -5,4 +5,4 @@
 - this is a boilerplate specifically for me; so it's including zurb-foundation for sass.
 - because, that's why.
 
-Clone, ```npm install``` and then ```grunt start```.
+Clone, ```npm install``` and then ```grunt server```.
