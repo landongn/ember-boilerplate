@@ -22,23 +22,15 @@ module.exports = function (grunt) {
         project: projectConfig,
         watch: {
             emberTemplates: {
-                files: '<%= project.dev %>src/templates/**/*.hbs',
+                files: '<%= project.dev %>src/**/*.hbs',
                 tasks: ['emberTemplates']
             },
-            coffee: {
-                files: ['<%= project.dev %>/src/{,*/}*.coffee'],
-                tasks: ['coffee:release']
-            },
-            coffeeTest: {
-                files: ['test/spec/{,*/}*.coffee'],
-                tasks: ['coffee:test']
-            },
             compass: {
-                files: ['<%= project.dev %>/styles/{,*/}*.{scss,sass}'],
+                files: ['<%= project.dev %>/styles/**/*.{scss,sass}'],
                 tasks: ['compass:server']
             },
             neuter: {
-                files: ['<%= project.dev %>/src/{,*/}*.js'],
+                files: ['<%= project.dev %>/src/**/*.js'],
                 tasks: ['neuter']
             },
             livereload: {
@@ -127,26 +119,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        coffee: {
-            release: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= project.dev %>/src',
-                    src: '{,*/}*.coffee',
-                    dest: '.tmp/src',
-                    ext: '.js'
-                }]
-            },
-            test: {
-                files: [{
-                    expand: true,
-                    cwd: 'test/spec',
-                    src: '{,*/}*.coffee',
-                    dest: '.tmp/spec',
-                    ext: '.js'
-                }]
-            }
-        },
         compass: {
             options: {
                 require: 'zurb-foundation',
@@ -156,7 +128,7 @@ module.exports = function (grunt) {
                 imagesDir: '<%= project.dev %>/images',
                 javascriptsDir: '<%= project.dev %>/src',
                 fontsDir: '<%= project.dev %>/styles/fonts',
-                importPath: 'app/bower_components',
+                importPath: 'app/src/lib',
                 httpImagesPath: '/images',
                 httpGeneratedImagesPath: '/images/generated',
                 httpFontsPath: '/styles/fonts',
@@ -276,17 +248,14 @@ module.exports = function (grunt) {
         concurrent: {
             server: [
                 'emberTemplates',
-                'coffee:release',
                 'compass:server'
             ],
             test: [
                 'emberTemplates',
-                'coffee',
                 'compass'
             ],
             release: [
                 'emberTemplates',
-                'coffee',
                 'compass:release',
                 'imagemin',
                 'svgmin',
@@ -307,7 +276,7 @@ module.exports = function (grunt) {
             },
             release: {
                 files: {
-                    '.tmp/src/compiled-templates.js': '<%= project.dev %>src/templates/{,*/}*.hbs'
+                    '.tmp/src/compiled-templates.js': '<%= project.dev %>src/**/*.hbs'
                 }
             }
         },
