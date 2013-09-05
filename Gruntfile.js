@@ -6,12 +6,6 @@ var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to match all subfolders:
-// 'test/spec/**/*.js'
-
 module.exports = function (grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
@@ -19,32 +13,32 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
     // configurable paths
-    var yeomanConfig = {
-        app: 'app',
-        dist: 'dist'
+    var projectConfig = {
+        dev: 'app',
+        release: 'release'
     };
 
     grunt.initConfig({
-        yeoman: yeomanConfig,
+        project: projectConfig,
         watch: {
             emberTemplates: {
-                files: '<%= yeoman.app %>/templates/**/*.hbs',
+                files: '<%= project.dev %>src/templates/**/*.hbs',
                 tasks: ['emberTemplates']
             },
             coffee: {
-                files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
-                tasks: ['coffee:dist']
+                files: ['<%= project.dev %>/src/{,*/}*.coffee'],
+                tasks: ['coffee:release']
             },
             coffeeTest: {
                 files: ['test/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
             },
             compass: {
-                files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+                files: ['<%= project.dev %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass:server']
             },
             neuter: {
-                files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+                files: ['<%= project.dev %>/src/{,*/}*.js'],
                 tasks: ['neuter']
             },
             livereload: {
@@ -52,10 +46,10 @@ module.exports = function (grunt) {
                     livereload: LIVERELOAD_PORT
                 },
                 files: [
-                    '.tmp/scripts/*.js',
-                    '<%= yeoman.app %>/*.html',
-                    '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-                    '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+                    '.tmp/src/*.js',
+                    '<%= project.dev %>/*.html',
+                    '{.tmp,<%= project.dev %>}/styles/{,*/}*.css',
+                    '<%= project.dev %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
         },
@@ -71,7 +65,7 @@ module.exports = function (grunt) {
                         return [
                             lrSnippet,
                             mountFolder(connect, '.tmp'),
-                            mountFolder(connect, yeomanConfig.app)
+                            mountFolder(connect, projectConfig.dev)
                         ];
                     }
                 }
@@ -86,11 +80,11 @@ module.exports = function (grunt) {
                     }
                 }
             },
-            dist: {
+            release: {
                 options: {
                     middleware: function (connect) {
                         return [
-                            mountFolder(connect, yeomanConfig.dist)
+                            mountFolder(connect, projectConfig.release)
                         ];
                     }
                 }
@@ -102,13 +96,13 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            dist: {
+            release: {
                 files: [{
                     dot: true,
                     src: [
                         '.tmp',
-                        '<%= yeoman.dist %>/*',
-                        '!<%= yeoman.dist %>/.git*'
+                        '<%= project.release %>/*',
+                        '!<%= project.release %>/.git*'
                     ]
                 }]
             },
@@ -120,8 +114,8 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '<%= yeoman.app %>/scripts/{,*/}*.js',
-                '!<%= yeoman.app %>/scripts/vendor/*',
+                '<%= project.dev %>/src/{,*/}*.js',
+                '!<%= project.dev %>/src/vendor/*',
                 'test/spec/{,*/}*.js'
             ]
         },
@@ -134,12 +128,12 @@ module.exports = function (grunt) {
             }
         },
         coffee: {
-            dist: {
+            release: {
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.app %>/scripts',
+                    cwd: '<%= project.dev %>/src',
                     src: '{,*/}*.coffee',
-                    dest: '.tmp/scripts',
+                    dest: '.tmp/src',
                     ext: '.js'
                 }]
             },
@@ -156,19 +150,19 @@ module.exports = function (grunt) {
         compass: {
             options: {
                 require: 'zurb-foundation',
-                sassDir: '<%= yeoman.app %>/styles',
+                sassDir: '<%= project.dev %>/styles',
                 cssDir: '.tmp/styles',
                 generatedImagesDir: '.tmp/images/generated',
-                imagesDir: '<%= yeoman.app %>/images',
-                javascriptsDir: '<%= yeoman.app %>/scripts',
-                fontsDir: '<%= yeoman.app %>/styles/fonts',
+                imagesDir: '<%= project.dev %>/images',
+                javascriptsDir: '<%= project.dev %>/src',
+                fontsDir: '<%= project.dev %>/styles/fonts',
                 importPath: 'app/bower_components',
                 httpImagesPath: '/images',
                 httpGeneratedImagesPath: '/images/generated',
                 httpFontsPath: '/styles/fonts',
                 relativeAssets: false
             },
-            dist: {},
+            release: {},
             server: {
                 options: {
                     debugInfo: true
@@ -178,74 +172,74 @@ module.exports = function (grunt) {
         // not used since Uglify task does concat,
         // but still available if needed
         /*concat: {
-            dist: {}
+            release: {}
         },*/
         // not enabled since usemin task does concat and uglify
         // check index.html to edit your build targets
         // enable this task if you prefer defining your build targets here
         /*uglify: {
-            dist: {}
+            release: {}
         },*/
         rev: {
-            dist: {
+            release: {
                 files: {
                     src: [
-                        '<%= yeoman.dist %>/scripts/{,*/}*.js',
-                        '<%= yeoman.dist %>/styles/{,*/}*.css',
-                        '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
-                        '<%= yeoman.dist %>/styles/fonts/*'
+                        '<%= project.release %>/src/{,*/}*.js',
+                        '<%= project.release %>/styles/{,*/}*.css',
+                        '<%= project.release %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
+                        '<%= project.release %>/styles/fonts/*'
                     ]
                 }
             }
         },
         useminPrepare: {
-            html: '<%= yeoman.app %>/index.html',
+            html: '<%= project.dev %>/index.html',
             options: {
-                dest: '<%= yeoman.dist %>'
+                dest: '<%= project.release %>'
             }
         },
         usemin: {
-            html: ['<%= yeoman.dist %>/{,*/}*.html'],
-            css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+            html: ['<%= project.release %>/{,*/}*.html'],
+            css: ['<%= project.release %>/styles/{,*/}*.css'],
             options: {
-                dirs: ['<%= yeoman.dist %>']
+                dirs: ['<%= project.release %>']
             }
         },
         imagemin: {
-            dist: {
+            release: {
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.app %>/images',
+                    cwd: '<%= project.dev %>/images',
                     src: '{,*/}*.{png,jpg,jpeg}',
-                    dest: '<%= yeoman.dist %>/images'
+                    dest: '<%= project.release %>/images'
                 }]
             }
         },
         svgmin: {
-            dist: {
+            release: {
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.app %>/images',
+                    cwd: '<%= project.dev %>/images',
                     src: '{,*/}*.svg',
-                    dest: '<%= yeoman.dist %>/images'
+                    dest: '<%= project.release %>/images'
                 }]
             }
         },
         cssmin: {
-            dist: {
+            release: {
                 files: {
-                    '<%= yeoman.dist %>/styles/main.css': [
+                    '<%= project.release %>/styles/main.css': [
                         '.tmp/styles/{,*/}*.css',
-                        '<%= yeoman.app %>/styles/{,*/}*.css'
+                        '<%= project.dev %>/styles/{,*/}*.css'
                     ]
                 }
             }
         },
         htmlmin: {
-            dist: {
+            release: {
                 options: {
                     /*removeCommentsFromCDATA: true,
-                    // https://github.com/yeoman/grunt-usemin/issues/44
+                    // https://github.com/project/grunt-usemin/issues/44
                     //collapseWhitespace: true,
                     collapseBooleanAttributes: true,
                     removeAttributeQuotes: true,
@@ -256,20 +250,20 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.app %>',
+                    cwd: '<%= project.dev %>',
                     src: '*.html',
-                    dest: '<%= yeoman.dist %>'
+                    dest: '<%= project.release %>'
                 }]
             }
         },
         // Put files not handled in other tasks here
         copy: {
-            dist: {
+            release: {
                 files: [{
                     expand: true,
                     dot: true,
-                    cwd: '<%= yeoman.app %>',
-                    dest: '<%= yeoman.dist %>',
+                    cwd: '<%= project.dev %>',
+                    dest: '<%= project.release %>',
                     src: [
                         '*.{ico,txt}',
                         '.htaccess',
@@ -282,7 +276,7 @@ module.exports = function (grunt) {
         concurrent: {
             server: [
                 'emberTemplates',
-                'coffee:dist',
+                'coffee:release',
                 'compass:server'
             ],
             test: [
@@ -290,10 +284,10 @@ module.exports = function (grunt) {
                 'coffee',
                 'compass'
             ],
-            dist: [
+            release: [
                 'emberTemplates',
                 'coffee',
-                'compass:dist',
+                'compass:release',
                 'imagemin',
                 'svgmin',
                 'htmlmin'
@@ -307,13 +301,13 @@ module.exports = function (grunt) {
         emberTemplates: {
             options: {
                 templateName: function (sourceFile) {
-                    var templatePath = yeomanConfig.app + '/templates/';
+                    var templatePath = projectConfig.dev + 'src/templates/';
                     return sourceFile.replace(templatePath, '');
                 }
             },
-            dist: {
+            release: {
                 files: {
-                    '.tmp/scripts/compiled-templates.js': '<%= yeoman.app %>/templates/{,*/}*.hbs'
+                    '.tmp/src/compiled-templates.js': '<%= project.dev %>src/templates/{,*/}*.hbs'
                 }
             }
         },
@@ -324,15 +318,15 @@ module.exports = function (grunt) {
                         return 'app/' + filepath;
                     }
                 },
-                src: '<%= yeoman.app %>/scripts/app.js',
-                dest: '.tmp/scripts/combined-scripts.js'
+                src: '<%= project.dev %>/src/app.js',
+                dest: '.tmp/src/combined-scripts.js'
             }
         }
     });
 
     grunt.registerTask('server', function (target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+        if (target === 'release') {
+            return grunt.task.run(['build', 'open', 'connect:release:keepalive']);
         }
 
         grunt.task.run([
@@ -354,9 +348,9 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('build', [
-        'clean:dist',
+        'clean:release',
         'useminPrepare',
-        'concurrent:dist',
+        'concurrent:release',
         'neuter:app',
         'concat',
         'cssmin',

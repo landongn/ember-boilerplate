@@ -1,0 +1,56 @@
+@mixin keyframes ($animation_name) {
+    @-webkit-keyframes $animation_name {
+        @content;
+    }
+
+    @-moz-keyframes $animation_name {
+        @content;
+    }
+
+    @-o-keyframes $animation_name {
+        @content;
+    }
+
+    @keyframes $animation_name {
+        @content;
+    }
+}
+
+@mixin animation-direction ($mode) {
+    -webkit-animation-direction: $mode;
+    -moz-animation-direction: $mode;
+    -o-animation-direction: $mode;
+    -ms-animation-direction: $mode;
+    animation-direction: $mode;
+}
+@mixin animation ($name, $duration, $delay, $iteration, $easing) {
+    -webkit-animation-delay: $delay;
+    -webkit-animation-duration: $duration;
+    -webkit-animation-name: $name;
+    -webkit-animation-iteration-count: $iteration;
+    -webkit-animation-timing-function: $easing;
+
+    -moz-animation-delay: $delay;
+    -moz-animation-duration: $duration;
+    -moz-animation-name: $name;
+    -moz-animation-iteration-count: $iteration;
+    -moz-animation-timing-function: $easing;
+
+    -ms-animation-delay: $delay;
+    -ms-animation-duration: $duration;
+    -ms-animation-name: $name;
+    -ms-animation-iteration-count: $iteration;
+    -ms-animation-timing-function: $easing;
+
+    -o-animation-delay: $delay;
+    -o-animation-duration: $duration;
+    -o-animation-name: $name;
+    -o-animation-iteration-count: $iteration;
+    -o-animation-timing-function: $easing;
+
+    animation-delay: $delay;
+    animation-duration: $duration;
+    animation-name: $name;
+    animation-iteration-count: $iteration;
+    animation-timing-function: $easing;
+}
