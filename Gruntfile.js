@@ -22,7 +22,7 @@ module.exports = function (grunt) {
         project: projectConfig,
         watch: {
             emberTemplates: {
-                files: '<%= project.dev %>src/**/*.hbs',
+                files: '<%= project.dev %>/templates/**/*.hbs',
                 tasks: ['emberTemplates']
             },
             compass: {
@@ -47,9 +47,9 @@ module.exports = function (grunt) {
         },
         connect: {
             options: {
-                port: 9000,
+                port: 8000,
                 // change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
+                hostname: '0.0.0.0'
             },
             livereload: {
                 options: {
@@ -84,7 +84,7 @@ module.exports = function (grunt) {
         },
         open: {
             server: {
-                path: 'http://localhost:<%= connect.options.port %>'
+                path: 'http://0.0.0.0:<%= connect.options.port %>'
             }
         },
         clean: {
@@ -141,17 +141,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        // not used since Uglify task does concat,
-        // but still available if needed
-        /*concat: {
-            release: {}
-        },*/
-        // not enabled since usemin task does concat and uglify
-        // check index.html to edit your build targets
-        // enable this task if you prefer defining your build targets here
-        /*uglify: {
-            release: {}
-        },*/
         rev: {
             release: {
                 files: {
@@ -200,7 +189,7 @@ module.exports = function (grunt) {
         cssmin: {
             release: {
                 files: {
-                    '<%= project.release %>/styles/main.css': [
+                    '<%= project.release %>/styles/style.css': [
                         '.tmp/styles/{,*/}*.css',
                         '<%= project.dev %>/styles/{,*/}*.css'
                     ]
@@ -209,17 +198,7 @@ module.exports = function (grunt) {
         },
         htmlmin: {
             release: {
-                options: {
-                    /*removeCommentsFromCDATA: true,
-                    // https://github.com/project/grunt-usemin/issues/44
-                    //collapseWhitespace: true,
-                    collapseBooleanAttributes: true,
-                    removeAttributeQuotes: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true*/
-                },
+                options: {},
                 files: [{
                     expand: true,
                     cwd: '<%= project.dev %>',
@@ -270,13 +249,13 @@ module.exports = function (grunt) {
         emberTemplates: {
             options: {
                 templateName: function (sourceFile) {
-                    var templatePath = projectConfig.dev + 'src/templates/';
+                    var templatePath = projectConfig.dev + '/templates/';
                     return sourceFile.replace(templatePath, '');
                 }
             },
             release: {
                 files: {
-                    '.tmp/src/compiled-templates.js': '<%= project.dev %>src/**/*.hbs'
+                    '.tmp/src/compiled-templates.js': '<%= project.dev %>/templates/**/*.hbs'
                 }
             }
         },
