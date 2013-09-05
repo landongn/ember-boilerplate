@@ -114,8 +114,8 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '<%= project.dev %>/src/{,*/}*.js',
-                '!<%= project.dev %>/src/vendor/*',
+                '<%= project.dev %>/src/**/*.js',
+                '!<%= project.dev %>/src/lib/*',
                 'test/spec/{,*/}*.js'
             ]
         },
